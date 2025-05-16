@@ -2,30 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { deleteUser, updateUser } from "../services/admin";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-// Add MUI imports
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Modal,
-  Box,
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-} from "@mui/material";
+import {Card,CardContent,Typography,Button,Modal,Box,TextField,Select,MenuItem,InputLabel,FormControl} from "@mui/material";
 
-const UserCard = ({
-  username,
-  id,
-  role,
-}: {
-  username: string;
-  id: string;
-  role: string;
-}) => {
+const UserCard = ({username,id,role,}: {username: string;id: string;role: string;}) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -39,7 +18,7 @@ const UserCard = ({
     mutationFn: () => updateUser(id, userName, updatedRole),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      closeModal();
+      closeModal(); 
     },
   });
 
@@ -81,10 +60,7 @@ const UserCard = ({
 
       <Modal
         open={!!modalType}
-        onClose={closeModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+        onClose={closeModal}>
         <Box
           sx={{
             backgroundColor: "white",

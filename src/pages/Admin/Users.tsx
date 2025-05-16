@@ -57,7 +57,7 @@ const Users = () => {
 
   if (isLoading)
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+      <Box sx={{ display: "flex", justifyContent: "center",alignItems:"center",height:"100vh", mt: 4 }}>
         <CircularProgress />
       </Box>
     );

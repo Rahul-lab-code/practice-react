@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   Autocomplete,
   Box,
-  Chip,
   TextField,
   CircularProgress,
   Typography,
@@ -60,46 +59,21 @@ export default function MultipleSelectChipAutocomplete({ setAssignees }: Props) 
         options={memberOptions}
         getOptionLabel={(option) => option.username}
         onChange={handleChange}
-        filterSelectedOptions
-        disableCloseOnSelect
-        clearOnBlur={false}
-        isOptionEqualToValue={(option, value) => option._id === value._id}
         loading={loading}
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => {
-            const { key, ...tagProps } = getTagProps({ index });
-            return (
-              <Chip
-                key={option._id}
-                label={option.username}
-                {...tagProps}
-              />
-            );
-          })
-        }
         renderInput={(params) => (
           <TextField
             {...params}
-            variant="outlined"
             label="Assignees"
-            placeholder="Select or type name"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <>
-                  {loading && <CircularProgress size={20} />}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            }}
+            placeholder="Select names"
           />
         )}
       />
-      {error && (
-        <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-          {error}
-        </Typography>
-      )}
-    </Box>
+  {error && (
+    <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+      {error}
+    </Typography>
+  )}
+</Box>
+
   );
 }

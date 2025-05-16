@@ -2,22 +2,26 @@ import type { TaskType, updateTaskProps } from "../types";
 import { api } from "./auth";
 
 
-export const getTasks = async()=>{
-    try {
-        const storedToken = localStorage.getItem('token');
-        const response = await api.get('/tasks',{
-        headers:{
-            Authorization:`Bearer ${storedToken}`
-        }
+export const getTasks = async (page = 1, limit = 10) => {
+  try {
+    const storedToken = localStorage.getItem('token');
+    const response = await api.get('/tasks', {
+      headers: {
+        Authorization: `Bearer ${storedToken}`
+      },
+      params: {
+        page,
+        limit
+      }
     });
-        console.log(response.data);
-        
-        return response.data;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not get Tasks');
-    }
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Could not get Tasks');
+  }
 }
+
 
 
 export const createTask = async({title,description,priority,assignees}:TaskType)=>{

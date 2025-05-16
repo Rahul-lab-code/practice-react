@@ -38,3 +38,10 @@ export interface fetchedTaskType extends Omit<TaskType, 'assignees'> {
     _id: string;
     assignees: fetchedUserType[];
 }
+
+
+export interface paginationTaskType extends fetchedTaskType{
+    totalPages:number;
+    totalTasks : number;
+    tasks : fetchedTaskType[];
+}

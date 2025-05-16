@@ -1,16 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom"
 import { getTasks } from "../../services/tasks";
-import { type fetchedTaskType } from "../../types";
+import { type paginationTaskType } from "../../types";
 import { Button, Card, CardContent, Container, Stack, Typography } from "@mui/material";
+import { useState } from "react";
 
 
 const Tasks = () => {
   const navigate = useNavigate();
-  const { data: tasks, isLoading, isError } = useQuery<fetchedTaskType[]>({
-    queryKey:["tasks"],
-    queryFn:getTasks
+
+  const [page,setPage] = useState(1);
+  const limit = 5;
+
+  const { data, isLoading, isError } = useQuery<paginationTaskType>({
+    queryKey:["tasks",page,limit],
+    queryFn:()=>getTasks(page,limit),
   });
+
+  const totalPages = data?.totalPages ?? 1;
 
  if (isLoading) return <Container><Typography>Loading...</Typography></Container>;
   if (isError) return <Container><Typography color="error">Error loading tasks</Typography></Container>;
@@ -26,7 +33,7 @@ const Tasks = () => {
         Create Task
       </Button>
       <Stack spacing={2}>
-        {tasks?.map((task) => (
+        {data?.tasks.map((task) => (
           <Card key={task._id} variant="outlined">
             <CardContent>
               <Typography variant="h6">{task.title}</Typography>
@@ -38,6 +45,26 @@ const Tasks = () => {
             </CardContent>
           </Card>
         ))}
+      </Stack>
+
+      <Stack direction="row" spacing={2} justifyContent="center" mt={3}>
+        <Button
+          variant="outlined"
+          disabled={page === 1}
+          onClick={() => setPage((old) => Math.max(old - 1, 1))}
+        >
+          Previous
+        </Button>
+        <Typography variant="body1" sx={{ alignSelf: "center" }}>
+          Page {page} of {totalPages}
+        </Typography>
+        <Button
+          variant="outlined"
+          disabled={page === totalPages}
+          onClick={() => setPage((old) => Math.min(old + 1, totalPages))}
+        >
+          Next
+        </Button>
       </Stack>
     </Container>
   )

@@ -19,7 +19,6 @@ const LoginPage = () => {
         console.log(userName,password);
         try{
             const {token,role} = await login({username:userName,password:password});
-            // auth context
             auth.login(token,role);
             switch (role) {
                 case 'admin':
@@ -46,7 +45,7 @@ const LoginPage = () => {
     minHeight="100vh"
   >
     <Paper elevation={5} sx={{ p: 4, minWidth: 350 }}>
-      <Typography variant="h4" component="h1" gutterBottom align="center">
+      <Typography variant="h4" component="h1" align="center">
         Login
       </Typography>
       <form onSubmit={handleLogin}>

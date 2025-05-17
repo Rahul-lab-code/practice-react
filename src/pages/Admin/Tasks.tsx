@@ -2,8 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom"
 import { getTasks } from "../../services/tasks";
 import { type paginationTaskType } from "../../types";
-import { Button, Card, CardContent, Container, Stack, Typography } from "@mui/material";
+import { Button, Container, Stack, Typography } from "@mui/material";
 import { useState } from "react";
+import { TaskCard } from "../../components/TaskCard";
 
 
 const Tasks = () => {
@@ -33,18 +34,13 @@ const Tasks = () => {
         Create Task
       </Button>
       <Stack spacing={2}>
-        {data?.tasks.map((task) => (
-          <Card key={task._id} variant="outlined">
-            <CardContent>
-              <Typography variant="h6">{task.title}</Typography>
-              <Typography variant="body2" color="text.secondary">{task.description}</Typography>
-              <Typography variant="body2">Priority: {task.priority}</Typography>
-              <Typography variant="body2">
-                Assignees: {task.assignees.map((assignee) => assignee.username).join(", ")}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
+        {data?.tasks.map((task) => <TaskCard 
+        key={task._id}
+        _id={task._id} 
+        assignees={task.assignees} 
+        description={task.description} 
+        priority={task.priority} 
+        title={task.title} />)}
       </Stack>
 
       <Stack direction="row" spacing={2} justifyContent="center" mt={3}>

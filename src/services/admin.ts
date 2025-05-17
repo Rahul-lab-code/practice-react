@@ -1,5 +1,39 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type { RegisterProps } from "../types";
 import { api } from "./auth"
+
+
+export function generateErrorMessage(
+  status?: number,
+  backendMessage?: string,
+  resource = "resource"
+): string {
+  if (typeof status !== "number") {
+    return `An error occurred while processing the ${resource}.`;
+  }
+
+  switch (status) {
+    case 400:
+      return backendMessage || `Bad request.`;
+    case 401:
+      return "Unauthorized: Please log in again.";
+    case 403:
+      return `Forbidden: You do not have permission to perform this action.`;
+    case 404:
+      return `resource not found.`;
+    case 409:
+      return backendMessage || `Conflict: The ${resource} already exists.`;
+    case 500:
+      return `Server error while processing the ${resource}. Try again later.`;
+    case 201:
+      return backendMessage ||  `resource created successfully.`;
+    case 204:
+      return backendMessage || `No content.`;
+    default:
+      return backendMessage || `An error occurred while processing the ${resource}.`;
+  }
+}
 
 
 export const getUsers =async ()=>{
@@ -11,9 +45,12 @@ export const getUsers =async ()=>{
         }
     })
         return response.data;
-    }catch(err){
-        console.log(err);
-        throw new Error ("Coudnt get the users");
+    }catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "user");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }
 
@@ -31,9 +68,12 @@ export const updateUser = async(id:string,username:string,role:string)=>{
         }
     })
         return response;
-    }catch(err){
-        console.log(err);
-        throw new Error('Cannot update User');
+    }catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "user");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }
 
@@ -47,9 +87,12 @@ export const deleteUser = async(id:string)=>{
         }
     })
         return response;
-    }catch(err){
-        console.log(err);
-        throw new Error('Cannot Delete User');
+    }catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "user");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }
 
@@ -66,8 +109,11 @@ export const createUser = async ({username,password,role}:RegisterProps) => {
         }
     })
         return response;
-    }catch(err){
-        console.log(err);
-        throw new Error('Cannot Create User');
+    }catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "user");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }

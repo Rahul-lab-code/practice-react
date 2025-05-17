@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { TaskType, updateTaskProps } from "../types";
+import { generateErrorMessage } from "./admin";
 import { api } from "./auth";
 
 
@@ -16,10 +18,13 @@ export const getTasks = async (page = 1, limit = 10) => {
     });
     console.log(response.data);
     return response.data;
-  } catch (error) {
-    console.log(error);
-    throw new Error('Could not get Tasks');
-  }
+  } catch(err:any){
+          if (err.response) {
+              const message = generateErrorMessage(err.response.status, err.response.data?.message, "task");
+              throw new Error(message);
+          }
+          throw new Error("Couldn't process user request.");
+      }
 }
 
 
@@ -38,9 +43,12 @@ export const createTask = async({title,description,priority,assignees}:TaskType)
         }
     });
         return response;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not create Task');
+    } catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "task");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }
 
@@ -58,9 +66,12 @@ export const updateTask = async({id,status,description,priority}:updateTaskProps
         }
     });
         return response;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not create Task');
+    }catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "task");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }
 
@@ -73,9 +84,12 @@ export const deleteTask = async(id:string)=>{
         }
     });
         return response;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not delete Task');
+    } catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "user");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }
 
@@ -88,9 +102,12 @@ export const userTasks = async(userId:string)=>{
         }
     });
         return response.data;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not get users Task');
+    } catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "user");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }
 
@@ -104,8 +121,11 @@ export const taskHistory = async(taskId:string)=>{
         }
     });
         return response.data;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Could not get Task history');
+    }catch(err:any){
+        if (err.response) {
+            const message = generateErrorMessage(err.response.status, err.response.data?.message, "user");
+            throw new Error(message);
+        }
+        throw new Error("Couldn't process user request.");
     }
 }

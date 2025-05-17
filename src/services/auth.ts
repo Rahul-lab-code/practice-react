@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import type { loginProps } from "../types";
+import { generateErrorMessage } from "./admin";
 const API_BASE_URL = "http://localhost:3000";
 
 
@@ -27,8 +29,11 @@ export const login = async({username,password}:loginProps)=>{
             password
         });
         return response.data;
-    }catch(e){
-        console.log("Login Failed Please Try Again", e);
-        throw new Error("Invalid Credintials");
-    }
+    }catch(err:any){
+            if (err.response) {
+                const message = generateErrorMessage(err.response.status, err.response.data?.message, "user");
+                throw new Error(message);
+            }
+            throw new Error("Couldn't process user request.");
+        }
 }

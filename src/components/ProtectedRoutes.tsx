@@ -15,7 +15,7 @@ const ProtectedRoutes = ({ children, allowedRoles }: { children: JSX.Element; al
       setIsAuthorized(true); 
     }
     }
-  }, [token, role, allowedRoles, navigate]);
+  }, [token, role, allowedRoles]);
 
   if (isLoading) {
     return <div>Loading...</div>; 
